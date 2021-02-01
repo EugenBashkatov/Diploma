@@ -46,35 +46,66 @@ def is_visible(x0,x1,x):
 max_dim=9
 graph_array = np.eye(max_dim)
 iv=is_visible(0,1,2)
-x1 = 1
+
 
 
 print("******",line(0,1,1)[0],line(0,1,1)[1],line(0,1,1)[2],line(0,1,2)[3])
 # exit()
-my_range_x0=range(0,max_dim-1)
-for x0 in range(0, max_dim):
+# my_range_x0=range(0,max_dim-1)
+# for x0 in range(0, max_dim):
+#
+#     for x1 in range(x0+1, max_dim-2):
+#         my_range_cur_x=range(x1,max_dim-1)
+#
+#         for cur_x in my_range_cur_x:
+#             par_line = line(x0,x1,cur_x)
+#             par_y = data_list[cur_x][1]
+#             print("Analyse cur_x=",cur_x)
+#             num_visible = 0
+#
+#             if is_visible(x0,x1,cur_x):
+#                 num_visible += 1
+#                 print("Видно {0} из {1} через ({2},{3}) num {4}".format(cur_x,x0,x0,x1,num_visible))
+#                 print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", par_line, " par_y = ", par_y," ",is_visible(x0,x1,cur_x))
+#                 graph_array[x0][cur_x] = 1
+#                 graph_array[cur_x][x0] = 1
+#
+#                 if num_visible>0:
+#                     my_range_cur_x=range(cur_x+1,max_dim-1)
+#                     x1=cur_x
+#                     print("New Range_cur_x=",my_range_cur_x)
+#                     break
 
-    for x1 in range(x0+1, max_dim-2):
-        my_range_cur_x=range(x1,max_dim-1)
 
-        for cur_x in my_range_cur_x:
-            par_line = line(x0,x1,cur_x)
-            par_y = data_list[cur_x][1]
-            print("Analyse cur_x=",cur_x)
-            num_visible = 0
+x0 = 0
 
-            if is_visible(x0,x1,cur_x):
-                num_visible += 1
-                print("Видно {0} из {1} через ({2},{3}) num {4}".format(cur_x,x0,x0,x1,num_visible))
-                print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", par_line, " par_y = ", par_y," ",is_visible(x0,x1,cur_x))
-                graph_array[x0][cur_x] = 1
-                graph_array[cur_x][x0] = 1
 
-                if num_visible>0:
-                    my_range_cur_x=range(cur_x+1,max_dim-1)
-                    x1=cur_x
-                    print("New Range_cur_x=",my_range_cur_x)
-                    break
+while x0 < max_dim - 2:
+    x1 = x0 + 1
+    cur_x = x1 + 1
+    while cur_x < max_dim - 1:
+        vis = line(x0,x1,cur_x)
+        graph_array[x0][x1] = 1
+        graph_array[x1][x0] = 1
+        print(cur_x)
+
+        if vis[3]:
+            print("Видно {0} из {1} через ({2},{3})".format(cur_x, x0, x0, x1))
+            print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", vis[2], " par_y = ", data_list[x1][1],
+                  " ",
+                  is_visible(x0, x1, cur_x))
+
+            x1 = cur_x
+            graph_array[x0][x1] = 1
+            graph_array[x1][x0] = 1
+        cur_x += 1
+
+    x0 += 1
+
+
+
+
+
 
 print(graph_array)
 #print(graph_array[362])
