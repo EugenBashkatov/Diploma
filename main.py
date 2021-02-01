@@ -50,17 +50,65 @@ iv=is_visible(0,1,2)
 
 
 print("******",line(0,1,1)[0],line(0,1,1)[1],line(0,1,1)[2],line(0,1,2)[3])
-# exit()
-# my_range_x0=range(0,max_dim-1)
-# for x0 in range(0, max_dim):
+
+#exit()
+
+x0 = 0
+x1 = x0+1
+array_k=[]
+while True:
+    vis_k = line(x0, x1, x1)[0]
+    vis_k_next = line(x0, x1 + 1, x1+1)[0]
+    #print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
+    cluster_size = 0
+    #array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
+
+    #x1=x0+1
+    #for x1 in range(x0+1,max_dim-1):
+    while x1 <= max_dim-2:
+        vis_k = line(x0, x1, x1)[0]
+        vis_k_next = line(x0, x1+1, x1)[0]
+        print("From= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x1 + 1, "next_k=", vis_k_next)
+        array_k.append([x0, x1, vis_k,vis_k_next,cluster_size])
+        is_growing = vis_k < vis_k_next
+        is_decrease=not is_growing
+        if is_growing:
+            #vis_k=vis_k_next
+            #x0=x1+1
+            x1=x1+1
+            cluster_size = cluster_size+1
+        else:
+            cluster_size=0
+            x0=x1
+            x1=x0+1
+
+            print(x0, x1,x1+1, vis_k,vis_k_next,cluster_size,is_growing,is_decrease)
+    if x0 < 7:
+        print("******************")
+        print("array_k=\n",array_k)
+        print("******************")
+        break
+    else:
+        x0+=1
+
+# my_range_x1=range(x0,max_dim-2)
+# for x1 in range(2,max_dim-2):
 #
-#     for x1 in range(x0+1, max_dim-2):
+#     vis_k1=line(x0, x1, x1)[0]
+#
+#     print(x0,x1,vis_k,vis_k1)
+# # for x0 in my_range_x0:
+#     my_range_x1=range(x0+1,max_dim-2)
+#     my_range_x1=range(x0+1,x0+1)
+#     for x1 in my_range_x1:
 #         my_range_cur_x=range(x1,max_dim-1)
-#
+#         vis_k = line(x0,x1,cur_x)[0]
+#         print("kkkkk=",k)
 #         for cur_x in my_range_cur_x:
 #             par_line = line(x0,x1,cur_x)
 #             par_y = data_list[cur_x][1]
-#             print("Analyse cur_x=",cur_x)
+#             vis_k = line(x0, x1, cur_x)
+#             print("Analyse cur_x=",cur_x, vis_k)
 #             num_visible = 0
 #
 #             if is_visible(x0,x1,cur_x):
@@ -75,7 +123,7 @@ print("******",line(0,1,1)[0],line(0,1,1)[1],line(0,1,1)[2],line(0,1,2)[3])
 #                     x1=cur_x
 #                     print("New Range_cur_x=",my_range_cur_x)
 #                     break
-
+#
 
 x0 = 0
 
@@ -102,32 +150,32 @@ x0 = 0
 #
 #     x0 += 1
 
-x0 = 0
-x1 = 1
-cur_x = 2
-
-while x0 < 8:
-    vis = line(x0, x1, cur_x)
-    graph_array[x0][x1] = 1
-    graph_array[x1][x0] = 1
-    visible_counter = 0
-    if vis[3]:
-        visible_counter += 1
-        x1 = cur_x
-
-        if cur_x < 8: cur_x += 1
-        else:
-            graph_array[x0][x1] = 1
-            graph_array[x1][x0] = 1
-            break
-        print(cur_x)
-    else:
-        print(graph_array[x0])
-        x0 = x1
-        x1 = x0 + 1
-        cur_x = x1 + 1
-        # graph_array[x0][x1] += visible_counter
-        # graph_array[x1][x0] += visible_counter
+# x0 = 0
+# x1 = 1
+# cur_x = 2
+#
+# while x0 < 8:
+#     vis = line(x0, x1, cur_x)
+#     graph_array[x0][x1] = 1
+#     graph_array[x1][x0] = 1
+#     visible_counter = 0
+#     if vis[3]:
+#         visible_counter += 1
+#         x1 = cur_x
+#
+#         if cur_x < 8: cur_x += 1
+#         else:
+#             graph_array[x0][x1] = 1
+#             graph_array[x1][x0] = 1
+#             break
+#         print(cur_x)
+#     else:
+#         print(graph_array[x0])
+#         x0 = x1
+#         x1 = x0 + 1
+#         cur_x = x1 + 1
+#         # graph_array[x0][x1] += visible_counter
+#         # graph_array[x1][x0] += visible_counter
 
 
 
