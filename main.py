@@ -80,27 +80,56 @@ print("******",line(0,1,1)[0],line(0,1,1)[1],line(0,1,1)[2],line(0,1,2)[3])
 x0 = 0
 
 
-while x0 < max_dim - 2:
-    x1 = x0 + 1
-    cur_x = x1 + 1
-    while cur_x < max_dim - 1:
-        vis = line(x0,x1,cur_x)
-        graph_array[x0][x1] = 1
-        graph_array[x1][x0] = 1
-        print(cur_x)
+# while x0 < max_dim - 2:
+#     x1 = x0 + 1
+#     cur_x = x1 + 1
+#     while cur_x < max_dim - 1:
+#         vis = line(x0,x1,cur_x)
+#         graph_array[x0][x1] = 1
+#         graph_array[x1][x0] = 1
+#         print(cur_x)
+#
+#         if vis[3]:
+#             print("Видно {0} из {1} через ({2},{3})".format(cur_x, x0, x0, x1))
+#             print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", vis[2], " par_y = ", data_list[x1][1],
+#                   " ",
+#                   is_visible(x0, x1, cur_x))
+#
+#             x1 = cur_x
+#             graph_array[x0][x1] = 1
+#             graph_array[x1][x0] = 1
+#         cur_x += 1
+#
+#     x0 += 1
 
-        if vis[3]:
-            print("Видно {0} из {1} через ({2},{3})".format(cur_x, x0, x0, x1))
-            print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", vis[2], " par_y = ", data_list[x1][1],
-                  " ",
-                  is_visible(x0, x1, cur_x))
+x0 = 0
+x1 = 1
+cur_x = 2
 
-            x1 = cur_x
+while x0 < 8:
+    vis = line(x0, x1, cur_x)
+    graph_array[x0][x1] = 1
+    graph_array[x1][x0] = 1
+    visible_counter = 0
+    if vis[3]:
+        visible_counter += 1
+        x1 = cur_x
+
+        if cur_x < 8: cur_x += 1
+        else:
             graph_array[x0][x1] = 1
             graph_array[x1][x0] = 1
-        cur_x += 1
+            break
+        print(cur_x)
+    else:
+        print(graph_array[x0])
+        x0 = x1
+        x1 = x0 + 1
+        cur_x = x1 + 1
+        # graph_array[x0][x1] += visible_counter
+        # graph_array[x1][x0] += visible_counter
 
-    x0 += 1
+
 
 
 
