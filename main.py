@@ -1,7 +1,7 @@
 # This is a sample Python script.
 
-Token:
-cd5c0f2b8bb97f0cd4e46dd6f0e5647922a163d3
+# Token:
+# cd5c0f2b8bb97f0cd4e46dd6f0e5647922a163d3
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -19,16 +19,14 @@ def print_hi(name):
 # ['Num','Date','MinTemp','RayFrom','RayTo','dx','dy','K','B','FLiine']
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+            print_hi('PyCharm')
 
 df = pd.read_csv('daily-min-temperatures-02.csv',
                  names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
 data_list = df.to_numpy()
 
 
-# Cov = pd.read_csv("path/to/file.txt",
-#                 sep='\t',
-#                names=["Sequence", "Start", "End", "Coverage"])
+
 def line(x0,x1,x):
     y0 = data_list[x0][1]
     y1 = data_list[x1][1]
