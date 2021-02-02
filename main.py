@@ -10,7 +10,6 @@ import numpy as np
 import xlsxwriter
 
 
-
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
@@ -19,89 +18,90 @@ def print_hi(name):
 # ['Num','Date','MinTemp','RayFrom','RayTo','dx','dy','K','B','FLiine']
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-            print_hi('PyCharm')
+    print_hi('PyCharm')
 
-df = pd.read_csv('daily-min-temperatures-02.csv',
+df = pd.read_csv('daily-min-temperatures-01.csv',
                  names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
 data_list = df.to_numpy()
 
 
-
-def line(x0,x1,x):
+def line(x0, x1, x):
     y0 = data_list[x0][1]
     y1 = data_list[x1][1]
 
     k = (y1 - y0) / (x1 - x0)
     B = (x1 * y0 - x0 * y1) / (x1 - x0)
-    eps=1.e-3
-    return [k,B,k * x + B,(k * x + B-data_list[x][1]) <= 0]
+    eps = 1.e-3
+    return [k, B, k * x + B, (k * x + B - data_list[x][1]) <= 0]
 
-def is_visible(x0,x1,x):
+
+def is_visible(x0, x1, x):
     y0 = data_list[x0][1]
     y1 = data_list[x1][1]
 
     k = (y1 - y0) / (x1 - x0)
     B = (x1 * y0 - x0 * y1) / (x1 - x0)
-    eps=1.e-3
-    return (k * x + B-data_list[x][1]) <= 0
+    eps = 1.e-3
+    return (k * x + B - data_list[x][1]) <= 0
 
-max_dim=9
+
+max_dim = 365
 graph_array = np.eye(max_dim)
-iv=is_visible(0,1,2)
+iv = is_visible(0, 1, 2)
 
+print("******", line(0, 1, 1)[0], line(0, 1, 1)[1], line(0, 1, 1)[2], line(0, 1, 2)[3])
 
-
-print("******",line(0,1,1)[0],line(0,1,1)[1],line(0,1,1)[2],line(0,1,2)[3])
-
-#exit()
+# exit()
 
 x0 = 0
-x1 = x0+1
-array_k=[]
+x1 = x0 + 1
+array_k = []
 graph_array.fill(0)
+
 while True:
     vis_k = line(x0, x1, x1)[0]
-    vis_k_next = line(x0, x1 + 1, x1+1)[0]
-    #print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
+    vis_k_next = line(x0, x1 + 1, x1 + 1)[0]
+    # print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
     cluster_size = 1
-    #array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
+    # array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
     graph_array[x0][x0] = 1
-    #x1=x0+1
-    #for x1 in range(x0+1,max_dim-1):
-    while x1 <= max_dim-2:
+    # x1=x0+1
+    # for x1 in range(x0+1,max_dim-1):
+    while x1 <= max_dim - 2:
         vis_k = line(x0, x1, x1)[0]
-        vis_k_next = line(x0, x1+1, x1)[0]
+        vis_k_next = line(x0, x1 + 1, x1)[0]
         graph_array[x0][x0] = cluster_size
         print("From= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x1 + 1, "next_k=", vis_k_next)
-        array_k.append([x0, x1, vis_k,vis_k_next,cluster_size])
+        array_k.append([x0, x1, vis_k, vis_k_next, cluster_size])
         is_growing = vis_k < vis_k_next
-        is_decrease=not is_growing
+        is_decrease = not is_growing
         if is_growing:
             # Вершина вхоит в кластер? -да
-            #vis_k=vis_k_next
-            #x0=x1+1
+            # vis_k=vis_k_next
+            # x0=x1+1
             graph_array[x0][x1] = 1
             graph_array[x1][x0] = 1
-            x1=x1+1
-            cluster_size = cluster_size+1
+            x1 = x1 + 1
+            cluster_size = cluster_size + 1
             # graph_array[x1][x0] = 1
         else:
             # Вершина вхоит в кластер? -нет
-            cluster_size=1
+            cluster_size = 1
             # начало нового кластера
-            x0=x1
+            x0 = x1
             graph_array[x0][x1] = 1
             graph_array[x1][x0] = 1
-            x1=x0+1
+            x1 = x0 + 1
 
-            print(x0, x1,x1+1, vis_k,vis_k_next,cluster_size,is_growing,is_decrease)
-    if x0 < 7:
+            print(x0, x1, x1 + 1, vis_k, vis_k_next, cluster_size, is_growing, is_decrease)
+    if x0 < max_dim - 2:
+        # TODO Придумать, как обработать хвост
         print("******************")
-        print("array_k=\n",array_k)
+        print("array_k=\n", array_k)
         print("******************")
         break
     else:
-        x0+=1
+        x0 += 1
 
 # my_range_x1=range(x0,max_dim-2)
 # for x1 in range(2,max_dim-2):
@@ -138,7 +138,6 @@ while True:
 #
 
 x0 = 0
-
 
 # while x0 < max_dim - 2:
 #     x1 = x0 + 1
@@ -190,15 +189,9 @@ x0 = 0
 #         # graph_array[x1][x0] += visible_counter
 
 
-
-
-
-
-
-
 print(graph_array)
-#print(graph_array[362])
-#print(graph_array[325])
+# print(graph_array[362])
+# print(graph_array[325])
 
 eOutput = pd.DataFrame(graph_array)
 writer = pd.ExcelWriter('ArrayFromPycharm.xlsx', engine='xlsxwriter')
@@ -208,4 +201,3 @@ eOutput.to_excel(writer, sheet_name='Sheet1', index=False)
 
 # Close the Pandas Excel writer and output the Excel file.
 writer.save()
-
