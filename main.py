@@ -57,30 +57,40 @@ print("******",line(0,1,1)[0],line(0,1,1)[1],line(0,1,1)[2],line(0,1,2)[3])
 x0 = 0
 x1 = x0+1
 array_k=[]
+graph_array.fill(0)
 while True:
     vis_k = line(x0, x1, x1)[0]
     vis_k_next = line(x0, x1 + 1, x1+1)[0]
     #print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
-    cluster_size = 0
+    cluster_size = 1
     #array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
-
+    graph_array[x0][x0] = 1
     #x1=x0+1
     #for x1 in range(x0+1,max_dim-1):
     while x1 <= max_dim-2:
         vis_k = line(x0, x1, x1)[0]
         vis_k_next = line(x0, x1+1, x1)[0]
+        graph_array[x0][x0] = cluster_size
         print("From= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x1 + 1, "next_k=", vis_k_next)
         array_k.append([x0, x1, vis_k,vis_k_next,cluster_size])
         is_growing = vis_k < vis_k_next
         is_decrease=not is_growing
         if is_growing:
+            # Вершина вхоит в кластер? -да
             #vis_k=vis_k_next
             #x0=x1+1
+            graph_array[x0][x1] = 1
+            graph_array[x1][x0] = 1
             x1=x1+1
             cluster_size = cluster_size+1
+            # graph_array[x1][x0] = 1
         else:
-            cluster_size=0
+            # Вершина вхоит в кластер? -нет
+            cluster_size=1
+            # начало нового кластера
             x0=x1
+            graph_array[x0][x1] = 1
+            graph_array[x1][x0] = 1
             x1=x0+1
 
             print(x0, x1,x1+1, vis_k,vis_k_next,cluster_size,is_growing,is_decrease)
