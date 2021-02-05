@@ -20,7 +20,7 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 
-DEBUG = True
+
 input_file_name='daily-min-temperatures-02.csv'
 df = pd.read_csv(input_file_name,
                  names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
@@ -49,71 +49,79 @@ def is_visible(x0, x1, x):
 
 
 max_dim = sum(1 for my_line in open(input_file_name,'r'))
-graph_array = np.eye(max_dim)
 
-x0 = 0
-x1 = x0 + 1
-array_k = []
-graph_array.fill(0)
-cluster_size = 1
 
-while True:
-    vis_k = line(x0, x1, x1)[0]
-    vis_k_next = line(x0, x1 + 1, x1 + 1)[0]
-    # print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
-    #cluster_size = 1
-    # array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
-    #graph_array[x0][x0] = cluster_size
-    x1 = x0+1
-    x2 = x1+1
-    # for x1 in range(x0+1,max_dim-1):
-    while x1 <= max_dim - 2:
+
+
+
+def print_graph_array(graph_array):
+    for ind in range(0,len(graph_array)):print(ind,":",graph_array[ind])
+
+def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
+    x0 = start_point
+    x1 = x0 + 1
+    cluster_size = 1
+    graph_array = np.eye(max_dim)
+    graph_array.fill(0)
+
+    array_k = []
+    while True:
         vis_k = line(x0, x1, x1)[0]
-        # x2 = x1+1
-        vis_k_next = line(x0, x2, x1)[0]
-        graph_array[x0][x0] = cluster_size
-        if DEBUG:print("DEBUG_1:GFrom= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x2, "next_k=", vis_k_next,cluster_size)
-        array_k.append([x0, x1, vis_k, vis_k_next, cluster_size])
-        is_growing = vis_k < vis_k_next
-        is_decrease = not is_growing
-        if is_growing:
-            # Вершина вхоит в кластер? -да
-            # vis_k=vis_k_next
-            # x0=x1+1
+        vis_k_next = line(x0, x1 + 1, x1 + 1)[0]
+        # print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
+        #cluster_size = 1
+        # array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
+        #graph_array[x0][x0] = cluster_size
+        x1 = x0+1
+        x2 = x1+1
+        # for x1 in range(x0+1,max_dim-1):
+        while x1 <= max_dim - 2:
+            vis_k = line(x0, x1, x1)[0]
+            # x2 = x1+1
+            vis_k_next = line(x0, x2, x1)[0]
+            graph_array[x0][x0] = cluster_size
+            if DEBUG:print("DEBUG_1:GFrom= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x2, "next_k=", vis_k_next,cluster_size)
+            array_k.append([x0, x1, vis_k, vis_k_next, cluster_size])
+            is_growing = vis_k < vis_k_next
+            is_decrease = not is_growing
+            if is_growing:
+                # Вершина вхоит в кластер? -да
+                # vis_k=vis_k_next
+                # x0=x1+1
+                graph_array[x0][x1] = 1
+                graph_array[x1][x0] = 1
+                x1 = x1 + 1
+                x2 = x1+1
+                cluster_size = cluster_size + 1
+                # graph_array[x1][x0] = 1
+            else:
+                # Вершина вхоит в кластер? -нет
+                cluster_size = 1
+                # начало нового кластера
+                x0 = x1
+                x2 = x1+1
+                graph_array[x0][x1] = 1
+                graph_array[x1][x0] = 1
+                x1 = x0 + 1
+                x2 = x1+1
+
+                if DEBUG:print(x0, x1, x2, vis_k, vis_k_next, cluster_size, is_growing, is_decrease)
+        if x0 == max_dim - 3:
+            # x1=x0+1
+            # x2=x1
+            # continue
+            # TODO Придумать, как обработать хвост
+            graph_array[x0][x0] = cluster_size+1
             graph_array[x0][x1] = 1
             graph_array[x1][x0] = 1
-            x1 = x1 + 1
-            x2 = x1+1
-            cluster_size = cluster_size + 1
-            # graph_array[x1][x0] = 1
+            if DEBUG:
+                print("****  Array_k  ****")
+                for ind in range(0,max_dim-2) : print( array_k[ind])
+                print("******************")
+            break
         else:
-            # Вершина вхоит в кластер? -нет
-            cluster_size = 1
-            # начало нового кластера
-            x0 = x1
-            x2 = x1+1
-            graph_array[x0][x1] = 1
-            graph_array[x1][x0] = 1
-            x1 = x0 + 1
-            x2 = x1+1
-
-            if DEBUG:print(x0, x1, x2, vis_k, vis_k_next, cluster_size, is_growing, is_decrease)
-    if x0 == max_dim - 3:
-        # x1=x0+1
-        # x2=x1
-        # continue
-        # TODO Придумать, как обработать хвост
-        graph_array[x0][x0] = cluster_size+1
-        graph_array[x0][x1] = 1
-        graph_array[x1][x0] = 1
-
-        print("******************")
-        for ind in range(0,max_dim-2) : print( array_k[ind])
-        print("******************")
-        break
-    else:
-        x0 += 1
-
+            x0 += 1
+    return graph_array
 # my_range_x1=range(x0,max_dim-2)
 # for x1 in range(2,max_dim-2):
 #
@@ -198,9 +206,9 @@ x0 = 0
 #         cur_x = x1 + 1
 #         # graph_array[x0][x1] += visible_counter
 #         # graph_array[x1][x0] += visible_counter
+graph_array = build_graph_with_clusters(0,max_dim, True)
+print(graph_array)
 
-
-for ind in range(0,max_dim):print(ind,":",graph_array[ind])
 
 # print(graph_array[362])
 # print(graph_array[325])
