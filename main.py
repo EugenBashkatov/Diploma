@@ -8,6 +8,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import logistic
+from scipy.stats import norm
 
 import xlsxwriter
 
@@ -22,12 +24,42 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
 
+def logistic_distribution(par_size,par_scale):
+    logis = logistic.rvs(size=par_size, scale = par_scale)
+    x_logistic = []
+    logistic_data = []
+    for i in range(0,len(logis)):
+        x_logistic.append(i)
+        logistic_data.append([i,logis[i]])
+    print(logistic_data)
 
-input_file_name='daily-min-temperatures-01.csv'
+    plt.plot(x_logistic,logis)
+    plt.show()
+    return logistic_data
+
+def normal_distribution(par_size,par_scale):
+    normal = norm.rvs(size=par_size, scale = par_scale)
+    x_normal = []
+    normal_data = []
+    for i in range(0,len(normal)):
+        x_normal.append(i)
+        normal_data.append([i,normal[i]])
+    # print(normal_data)
+
+    plt.plot(x_normal,normal)
+    plt.show()
+    return normal_data
+
+
+input_file_name='daily-min-temperatures-02.csv'
 df = pd.read_csv(input_file_name,
                  names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
 
-data_list = df.to_numpy()
+# data_list = df.to_numpy()
+# data_list = input_file_name
+#TODO Выбор распределения
+data_list = normal_distribution(20,10)
+
 
 
 def line(x0, x1, x):
@@ -50,8 +82,8 @@ def is_visible(x0, x1, x):
     return (k * x + B - data_list[x][1]) <= 0
 
 
-max_dim = sum(1 for my_line in open(input_file_name,'r'))
-
+# max_dim = sum(1 for my_line in open(input_file_name,'r'))
+max_dim = len(data_list)
 
 
 

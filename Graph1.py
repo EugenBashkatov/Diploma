@@ -22,27 +22,26 @@ print("@@@@ X @@@@ ", x)
 print("@@@@ Y @@@@ ", y)
 style.use('ggplot')
 
-x1 = [0,1,2][0,1,2]
-y1 = [2,2,2][3,3,3]
+x1 = [0,1,2]
+y1 = [2,2,2]
 
 # x2 = [0,0,0]
 # y2 = [4,3,2]
 
 
-plt.plot(x1,y1)
+# plt.plot(x1,y1)
 # plt.plot(x2,y2)
 
 # plt.legend(["Dataset 1", "Dataset 2"])
 #
-plt.title('Epic Info')
-plt.ylabel('Y axis')
-plt.xlabel('X axis')
+# plt.title('Epic Info')
+# plt.ylabel('Y axis')
+# plt.xlabel('X axis')
 #
-plt.show()
+# plt.show()
 #
 #
-#
-# plt.bar(x, y, align='center')
+plt.bar(x, y, align='center')
 #
 #
 #
@@ -51,5 +50,5 @@ plt.show()
 # plt.ylabel('Y axis')
 # plt.xlabel('X axis')
 #
-# plt.show()
+plt.show()
 

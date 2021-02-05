@@ -1,76 +1,34 @@
-import datetime
-import xlsxwriter
+from scipy.stats import logistic
+from scipy.stats import norm
+import matplotlib.pyplot as plt
+import numpy as np
 
-#import xlsreader
+def logistic_distribution(par_size,par_scale):
+    logis = logistic.rvs(size=par_size, scale = par_scale)
+    x_logistic = []
+    logistic_data = []
+    for i in range(0,len(logis)):
+        x_logistic.append(i)
+        logistic_data.append([i,logis[i]])
+    print(logistic_data)
 
-class FRay:
-    def __init__(self,i0,i1,K,B):
-        self.i0=i0
-        self.i1=i1
+    plt.plot(x_logistic,logis)
+    plt.show()
+    return logistic_data
 
-def create_headers(workbook,par_year):
-   
-    worksheet = workbook.add_worksheet("{0}".format(par_year))
+def normal_distribution(par_size,par_scale):
+    normal = norm.rvs(size=par_size, scale = par_scale)
+    x_normal = []
+    normal_data = []
+    for i in range(0,len(normal)):
+        x_normal.append(i)
+        normal_data.append([i,normal[i]])
+    # print(normal_data)
+    plt.bar(x_normal, normal, align='center')
+    # plt.plot(x_normal,normal)
+    plt.show()
+    return normal_data
 
-    worksheet.write(0,0, 'Num')
-    worksheet.write(0,1, 'Date')
-    worksheet.write(0,2, 'MinTemp')
-
-    worksheet.write(0,3, 'RayFrom')
-    worksheet.write(0,4, 'RayTo')
-
-    worksheet.write(0,5, 'dx')
-    worksheet.write(0,6, 'dy')
-    worksheet.write(0,7, 'K')
-    worksheet.write(0,8, 'B')
-    worksheet.write(0,9, 'FLiine')
-    return worksheet
-    
-
-workbook = xlsxwriter.Workbook(r'E:\Diploma\WWWW.xlsx')
-worksheet = create_headers(workbook,1981)
-
-fin=open(r'E:\Diploma\daily-min-temperatures.csv','r')
-row=0
-col=0
-count=0
-start_year = 1981
-
-while True:
-    count+=1
-    row+=1
-        # Get next line from file 
-    line = fin.readline() 
-    # if line is empty 
-    # end of file is reached 
-    if not line: 
-        break
-    print("Line{}: {}".format(count, line.strip())) 
-    date1,temp=line.split(',')
-    date2=date1.split('"')[1]
-   # print(date2)
-    print("Line{}: {}  {}".format(count, date2, temp))
-    #print(date)
-    date_time = datetime.datetime.strptime(date2, '%Y-%m-%d')
-    print(date_time)
-    cur_year = date_time.year
-    #print(year)
-    if cur_year != start_year:
-        start_year = cur_year
-        worksheet = create_headers(workbook,cur_year)
-        
-        row = 1
-        # posible to change count (0 or count+1)
-    worksheet.write(row,col,count)
-    #date_format = workbook.add_format({'num_format': 'd mmmm yyyy'})
-    worksheet.write(row,col+1,date2)
-    worksheet.write(row,col+2,float(temp))
-     
-fin.close()
-
-workbook.close()
-
-
-print(row)
+normal_distribution(201,10)
 
 
