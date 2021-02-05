@@ -7,6 +7,8 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+
 import xlsxwriter
 
 
@@ -21,7 +23,7 @@ if __name__ == '__main__':
     print_hi('PyCharm')
 
 
-input_file_name='daily-min-temperatures-02.csv'
+input_file_name='daily-min-temperatures-01.csv'
 df = pd.read_csv(input_file_name,
                  names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
 
@@ -68,16 +70,13 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
     while True:
         vis_k = line(x0, x1, x1)[0]
         vis_k_next = line(x0, x1 + 1, x1 + 1)[0]
-        # print("From= ",x0, "To= ",x1, "k= ",vis_k ,"Next= ",x1 + 1,"next_k=",vis_k_next)
-        #cluster_size = 1
-        # array_k.append([x0,x1,vis_k,vis_k_next,cluster_size])
-        #graph_array[x0][x0] = cluster_size
+
         x1 = x0+1
         x2 = x1+1
-        # for x1 in range(x0+1,max_dim-1):
+
         while x1 <= max_dim - 2:
             vis_k = line(x0, x1, x1)[0]
-            # x2 = x1+1
+             # x2 = x1+1
             vis_k_next = line(x0, x2, x1)[0]
             graph_array[x0][x0] = cluster_size
             if DEBUG:print("DEBUG_1:GFrom= ", x0, "To= ", x1, "k= ", vis_k, "Next= ", x2, "next_k=", vis_k_next,cluster_size)
@@ -119,99 +118,27 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
                 for ind in range(0,max_dim-2) : print( array_k[ind])
                 print("******************")
             break
-        else:
-            x0 += 1
+        if x1 == max_dim - 1:
+            break
+
+
     return graph_array
-# my_range_x1=range(x0,max_dim-2)
-# for x1 in range(2,max_dim-2):
-#
-#     vis_k1=line(x0, x1, x1)[0]
-#
-#     print(x0,x1,vis_k,vis_k1)
-# # for x0 in my_range_x0:
-#     my_range_x1=range(x0+1,max_dim-2)
-#     my_range_x1=range(x0+1,x0+1)
-#     for x1 in my_range_x1:
-#         my_range_cur_x=range(x1,max_dim-1)
-#         vis_k = line(x0,x1,cur_x)[0]
-#         print("kkkkk=",k)
-#         for cur_x in my_range_cur_x:
-#             par_line = line(x0,x1,cur_x)
-#             par_y = data_list[cur_x][1]
-#             vis_k = line(x0, x1, cur_x)
-#             print("Analyse cur_x=",cur_x, vis_k)
-#             num_visible = 0
-#
-#             if is_visible(x0,x1,cur_x):
-#                 num_visible += 1
-#                 print("Видно {0} из {1} через ({2},{3}) num {4}".format(cur_x,x0,x0,x1,num_visible))
-#                 print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", par_line, " par_y = ", par_y," ",is_visible(x0,x1,cur_x))
-#                 graph_array[x0][cur_x] = 1
-#                 graph_array[cur_x][x0] = 1
-#
-#                 if num_visible>0:
-#                     my_range_cur_x=range(cur_x+1,max_dim-1)
-#                     x1=cur_x
-#                     print("New Range_cur_x=",my_range_cur_x)
-#                     break
-#
 
-x0 = 0
 
-# while x0 < max_dim - 2:
-#     x1 = x0 + 1
-#     cur_x = x1 + 1
-#     while cur_x < max_dim - 1:
-#         vis = line(x0,x1,cur_x)
-#         graph_array[x0][x1] = 1
-#         graph_array[x1][x0] = 1
-#         print(cur_x)
-#
-#         if vis[3]:
-#             print("Видно {0} из {1} через ({2},{3})".format(cur_x, x0, x0, x1))
-#             print("x0 = ", x0, " x1= ", x1, " cur_x = ", cur_x, " par_line = ", vis[2], " par_y = ", data_list[x1][1],
-#                   " ",
-#                   is_visible(x0, x1, cur_x))
-#
-#             x1 = cur_x
-#             graph_array[x0][x1] = 1
-#             graph_array[x1][x0] = 1
-#         cur_x += 1
-#
-#     x0 += 1
 
-# x0 = 0
-# x1 = 1
-# cur_x = 2
-#
-# while x0 < 8:
-#     vis = line(x0, x1, cur_x)
-#     graph_array[x0][x1] = 1
-#     graph_array[x1][x0] = 1
-#     visible_counter = 0
-#     if vis[3]:
-#         visible_counter += 1
-#         x1 = cur_x
-#
-#         if cur_x < 8: cur_x += 1
-#         else:
-#             graph_array[x0][x1] = 1
-#             graph_array[x1][x0] = 1
-#             break
-#         print(cur_x)
-#     else:
-#         print(graph_array[x0])
-#         x0 = x1
-#         x1 = x0 + 1
-#         cur_x = x1 + 1
-#         # graph_array[x0][x1] += visible_counter
-#         # graph_array[x1][x0] += visible_counter
+
+
 graph_array = build_graph_with_clusters(0,max_dim, True)
 print(graph_array)
 
 
 # print(graph_array[362])
 # print(graph_array[325])
+
+plt.matshow(graph_array)
+
+plt.show()
+
 
 eOutput = pd.DataFrame(graph_array)
 writer = pd.ExcelWriter('ArrayFromPycharm.xlsx', engine='xlsxwriter')
