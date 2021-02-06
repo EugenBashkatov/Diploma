@@ -124,16 +124,8 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
 
     return graph_array
 
-
-
-
-
 graph_array = build_graph_with_clusters(0,max_dim, True)
 print(graph_array)
-
-
-# print(graph_array[362])
-# print(graph_array[325])
 
 plt.matshow(graph_array)
 
