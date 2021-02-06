@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print_hi('PyCharm')
 
 
-input_file_name='daily-min-temperatures-01.csv'
+input_file_name='daily-min-temperatures-02.csv'
 df = pd.read_csv(input_file_name,
                  names=['Date', 'MinTemp', 'RayFrom', 'RayTo', 'dx', 'dy', 'K', 'B', 'FLiine'])
 
@@ -81,8 +81,6 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
             is_decrease = not is_growing
             if is_growing:
                 # Вершина вхоит в кластер? -да
-                # vis_k=vis_k_next
-                # x0=x1+1
                 graph_array[x0][x1] = 1
                 graph_array[x1][x0] = 1
                 x1 = x1 + 1
@@ -99,13 +97,8 @@ def build_graph_with_clusters(start_point, max_dim, DEBUG = False):
                 graph_array[x1][x0] = 1
                 x1 = x0 + 1
                 x2 = x1+1
-
-                if DEBUG:print(x0, x1, x2, vis_k, vis_k_next, cluster_size, is_growing, is_decrease)
+                if DEBUG:print("DEBUG_2:",x0, x1, x2, vis_k, vis_k_next, cluster_size, is_growing, is_decrease)
         if x0 == max_dim - 3:
-            # x1=x0+1
-            # x2=x1
-            # continue
-            # TODO Придумать, как обработать хвост
             graph_array[x0][x0] = cluster_size+1
             graph_array[x0][x1] = 1
             graph_array[x1][x0] = 1
