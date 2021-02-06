@@ -52,10 +52,6 @@ def is_visible(x0, x1, x):
 
 max_dim = sum(1 for my_line in open(input_file_name,'r'))
 
-
-
-
-
 def print_graph_array(graph_array):
     for ind in range(0,len(graph_array)):print(ind,":",graph_array[ind])
 
